@@ -7,7 +7,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "../../components/ui/avatar";
-import { FormEvent, LegacyRef, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { addToMessages, fetchMessage } from "../../store/slice/messageSlice";
 import { Skeleton } from "../../components/ui/skeleton";
