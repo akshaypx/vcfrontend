@@ -49,7 +49,7 @@ const Speech = ({
   rate = 1.6,
   volume = 1,
   lang = "",
-  voice = 4,
+  voice = 1,
   startBtn = <Volume2 />,
   stopBtn = <StopCircle />,
   useStopOverPause,
@@ -70,7 +70,7 @@ const Speech = ({
   };
 
   const voices = getVoices();
-  const selectedVoice = voices[4];
+  const selectedVoice = voices[voice];
 
   const utterance = new window.SpeechSynthesisUtterance(
     text?.replace(/\s/g, " ")

@@ -1,77 +1,46 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import "regenerator-runtime/runtime";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
 import { Button } from "../ui/button";
 import { Mic } from "lucide-react";
+import annyang from "annyang";
 
 interface ISpeechRecognitionProps {
   setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
-  sendMessage: () => void;
+  sendMessage: (arg0: string) => void;
 }
 
 const SpeechRecognitionComponent = ({
   setSearchTerm,
   sendMessage,
 }: ISpeechRecognitionProps) => {
-  const [showRecognize, setShowRecognize] = useState<boolean>(false);
-  const { transcript, browserSupportsSpeechRecognition, resetTranscript } =
-    useSpeechRecognition();
-
-  if (!browserSupportsSpeechRecognition) {
-    return <span>Browser doesn't support speech recognition.</span>;
-  }
-
   useEffect(() => {
-    let silenceTimer: any;
-    let speakingTimer: any;
+    if (annyang) {
+      annyang.addCallback("result", (phrases: string[]) => {
+        const firstPhrase = phrases[0];
+        console.log(
+          firstPhrase.includes("VC")
+            ? handleWordDetection(firstPhrase.toLocaleLowerCase().substring(3))
+            : "No hot word"
+        );
+      });
 
-    if (transcript) {
-      setSearchTerm(transcript);
-      clearTimeout(silenceTimer);
-      clearTimeout(speakingTimer);
+      annyang.start();
 
-      speakingTimer = setTimeout(() => {
-        //invoke anything after speaking
-        stopListening(); // Stop listening when the user stops speaking
-        setShowRecognize(false);
-        resetTranscript();
-        sendMessage();
-      }, 1000);
-    } else {
-      // If there's no transcript (user not speaking), clear timers
-      silenceTimer = setTimeout(() => {
-        //not speaking anything
-        stopListening(); // Stop listening after the user doesn't speak for 3 seconds
-        setShowRecognize(false);
-      }, 3000);
+      return () => {
+        annyang.abort();
+        annyang.removeCallback("result");
+      };
     }
-
-    return () => {
-      clearTimeout(silenceTimer);
-      clearTimeout(speakingTimer);
-    };
   });
 
-  const startListening = () => {
-    //resetTranscript();
-    SpeechRecognition.startListening({ continuous: true, language: "en-IN" });
-  };
-
-  const stopListening = () => {
-    SpeechRecognition.stopListening();
+  const handleWordDetection = (text: string) => {
+    setSearchTerm(text);
+    sendMessage(text);
   };
 
   return (
     <div>
-      <Button
-        variant={showRecognize ? "destructive" : "ghost"}
-        onClick={() => {
-          setShowRecognize(true);
-          startListening();
-        }}
-      >
+      <Button variant={"destructive"}>
         <Mic size={20} />
       </Button>
     </div>

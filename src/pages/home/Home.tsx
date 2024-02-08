@@ -19,11 +19,10 @@ const Home = () => {
   const messages = useAppSelector((state) => state.message.messages2);
   const isLoading = useAppSelector((state) => state.message.loading);
   const dispatch = useAppDispatch();
-  // const formRef = useRef<HTMLFormElement>(null);
   const messageContainerRef = useRef<null | HTMLDivElement>(null);
 
-  const sendMessage = () => {
-    const query = searchTerm;
+  const sendMessage = (text: string) => {
+    const query = text;
     setSearchTerm("");
     const body = {
       user_request: query,
@@ -48,7 +47,6 @@ const Home = () => {
     dispatch(fetchMessage(body));
   };
 
-  // useEffect(() => {}, [sendMessage]);
   useEffect(() => {
     // Scroll to the latest message when messages change
     if (messageContainerRef.current) {
@@ -62,7 +60,7 @@ const Home = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    sendMessage();
+    sendMessage(searchTerm);
   };
 
   return (
@@ -137,7 +135,7 @@ const Home = () => {
                 </div>
               </div>
               <div className="border border-bg-primary-foreground p-2 rounded-full">
-                <Speech pitch={1} rate={1} voice={4} text={message.text} />
+                <Speech pitch={1} rate={1} voice={1} text={message.text} />
               </div>
             </div>
           );
