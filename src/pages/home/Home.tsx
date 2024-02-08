@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import { addToMessages, fetchMessage } from "../../store/slice/messageSlice";
 import { Skeleton } from "../../components/ui/skeleton";
 import Speech from "../../components/speech";
+import { ProductsEntity } from "../../interfaces/messageInterface";
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -112,7 +113,7 @@ const Home = () => {
                       </div>
                     ) : (
                       message.products &&
-                      message.products.map((p, _) => (
+                      message.products.map((p: ProductsEntity, _) => (
                         <div
                           className="w-full flex flex-col justify-between p-2 border border-bg-primary rounded-md bg-primary-foreground"
                           key={_}

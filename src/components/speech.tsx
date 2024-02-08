@@ -70,7 +70,7 @@ const Speech = ({
   };
 
   const voices = getVoices();
-  const selectedVoice = voices[voice];
+  const selectedVoice = voices[1];
 
   const utterance = new window.SpeechSynthesisUtterance(
     text?.replace(/\s/g, " ")

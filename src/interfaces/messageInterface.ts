@@ -25,15 +25,23 @@ export interface ResponseProductsEntity {
   product_name: string;
   summary: string;
   price: number;
+  varient?: VarientEntity[] | null;
 }
 export interface ProductsEntity {
   product_code: string;
   product_name: string;
   summary: string;
   price: string;
+  varient?: VarientEntity[] | null;
 }
 export interface Message {
   text: string;
   products?: ProductsEntity[] | null;
   selectedProduct?: ProductsEntity | null;
+  varient?: VarientEntity[] | null;
+}
+export interface VarientEntity {
+  name: string;
+  selected_varient?: string | null;
+  avilable?: string[] | null;
 }
